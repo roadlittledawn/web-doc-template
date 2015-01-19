@@ -1,0 +1,41 @@
+<html>
+	
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script>
+			$.ajax({
+			  url: "http://suncitymoon.com/new-relic/docs-collab-template",
+			  success: function(data){
+				 $(data).find("a:contains(.html)").each(function(){
+					// will loop through 
+					//var files = $(this).attr("href");
+					//var path = '<a href="' + files + '">' + files + '</a>';
+					
+					//$('<p></p>').html(path).appendTo('#dir');
+					 $('<li></li>').html( $(this) ).appendTo('#dir');
+					
+
+				 });
+				 
+			  }
+			});
+		</script>
+		
+	</head>
+	
+	<body>
+		
+		<h1>Content Index</h1>
+		
+		
+		<div id="dir"></div>
+		
+		
+		
+		
+		
+		
+		
+	</body>
+	
+</html>

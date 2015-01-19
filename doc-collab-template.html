@@ -1,0 +1,204 @@
+<html>
+
+<head>
+
+	<title>Docs Collaboration Template</title>
+
+	<meta name="viewport" content="width=device-width">
+
+	<link href="http://fonts.googleapis.com/css?family=Lato:300,400" rel="stylesheet" type="text/css">
+
+	<link href="style.css" type="text/css" rel="stylesheet">
+	<link href="font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet">
+
+	<script src="generated_toc.js"></script>
+	<script src="live.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	
+
+
+	<script>
+		/* For responsive design
+		*/
+		$(document).ready(function(){
+		  $("#hide").click(function(){
+			$("div.toc").hide();
+			$("#main-container").css( "margin", "0 5%" );
+			$("#hide").hide();
+			$("#show").show();
+		  });
+
+		  $("#show").click(function(){
+			$("div.toc").show();
+			$("#main-container").css( "margin", "0 0 0 25%" );
+			$("#hide").show();
+			$("#show").hide();	
+		  });
+
+		  $(window).resize(function(){
+			  if ($(window).width() <= 768) {
+				  $("#main-container").css( "margin", "0 5%" );
+			  }
+
+			  if ($(window).width() >= 769) {
+				  $("#main-container").css( "margin", "0 0 0 25%" );
+			  }
+		  })
+
+		});
+	</script>
+
+</head>
+
+<body>
+
+<div id="main-wrapper">
+
+<div id="toc-sidebar">
+	<p>TOC</p>
+    <button id="hide">Hide</button>
+    <button id="show">Show</button>
+    <div class="toc">
+    </div>
+</div>
+
+
+<div id="main-container">
+
+
+<div id="generated-toc"></div>
+	
+	
+<p class="doc-title">Doc Title</p>
+	
+<div id="doc-meta">
+	<p class="heading-collapse meta-title">Docs Meta</p>
+
+	<div class="target-collapse doc-meta-target">
+		<p><b>Tech Writer Use Only</b></p>
+
+		<table>
+			<thead>
+				
+				<th>Field</th>
+				<th>Value</th>
+				
+			</thead>
+			
+			<tbody>
+				<tr>
+					<td>Short title</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Keywords</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Sort Order</td>
+					<td></td>
+				</tr>
+			
+			</tbody>
+		</table>
+
+	</div>
+	
+	
+</div>
+		
+		
+		
+	
+<!-- Docs Site content -->
+    
+<p>Short, meaningful blurb that explains what this document is about. The <b>Contents</b> heading after it&nbsp;is managed programmatically. Leave it there with nothing between it and the next heading.</p>
+
+
+
+<h2 id="qiklinks">Contents</h2>
+
+
+<h2 id="meaningful_name">Heading example</h2>
+
+<p>Each section is preceded with a meaningful H2 title. Each&nbsp;title has an ID attribute that must be a valid XML token that is&nbsp;unique within the page.</p>
+
+<dl class="clamshell-list">
+	<dt id="tax-module">Structure &gt; Taxonomy</dt>
+	<dd>
+	<p>Best for renaming or editing terms [editing how? add to section title?].</p>
+
+	<p>To rename a term:</p>
+
+	<ol>
+		<li>From <b>Structure &gt; Taxonomy &gt; Primary Navigation &gt; list terms</b>, select <b>edit</b> for the desired term.</li>
+		<li>Rename the term using the Name field.</li>
+		<li>Update the <b>URL Path Settings &gt; URL alias</b> field to match the new name (no articles, dashes instead of spaces).</li>
+		<li>Review affected docs' URLs and <a href="/docs/new-relic-only/advanced-style-guide/processes-procedures/renaming-redirecting-document#titles">create redirects (start at step 3)</a> as necessary for all docs associated with that URL path.</li>
+	</ol>
+	</dd>
+	<dt id="tax-manager-module">Structure &gt; Taxonomy Manager</dt>
+	<dd>
+	<p>Best for moving or adding terms. [Not always stable?]</p>
+
+	<p>To move a term:</p>
+
+	<ol>
+		<li>From <b>Structure &gt; Taxonomy Manager &gt; Primary Navigation</b>, select the checkbox of the term you want to move.</li>
+		<li>Select <b>Move</b> from the <b>Toolbar</b> and start typing name of new parent term. Select the term from the autosuggest list.</li>
+		<li>Select <b>Move</b> [parent option important?].</li>
+		<li>Review affected docs' URLs and <a href="/docs/new-relic-only/advanced-style-guide/processes-procedures/renaming-redirecting-document#titles">create redirects (start at step 3)</a> as necessary for all docs associated with that URL path.</li>
+	</ol>
+
+	<p>To add a term:</p>
+
+	<ol>
+		<li>From <b>Structure &gt; Taxonomy Manager &gt; Primary Navigation</b>, select a term checkbox to define the parent of your new term.</li>
+		<li>Enter the name of the new term (as it will appear on front-end).</li>
+		<li>Select <b>Add</b>. The term is added to the regenerated list. It will appear in associated menus when a doc is added to that term.</li>
+	</ol>
+	</dd>
+</dl>
+
+<h2 id="more_help">For more help</h2>
+
+<p>This is sample text for the <b>For more help</b> section. If there are no links to include, remove this section but leave the <b>For more help</b> header.</p>
+
+<p>Additional documentation resources include:</p>
+
+<ul>
+	<li><a href="/docs/mobile-apps/installation-and-configuration">Some page</a> (some description)</li>
+</ul>
+
+  
+<!-- Docs Site content -->
+    
+    
+
+</div> <!-- main container -->
+
+</div> <!-- main wrapper -->
+
+
+<script src="lib/toc.js"></script>
+<script>
+  $('.toc').toc({
+	  
+	 /* Trying to scroll the TOC div window to highlighted element if/when TOC is longer
+	 
+	 'onHighlight': function(el) {.$this.scrollIntoView();}, */
+	  
+  });
+</script>
+
+<script src="functions.js"></script>
+
+</body>
+
+
+
+</html>
