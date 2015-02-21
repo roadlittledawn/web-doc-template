@@ -23,7 +23,7 @@
 		$(document).ready(function(){
 		  $("#hide").click(function(){
 			$("div.toc").hide();
-			$("#main-container").css( "margin", "0 5%" );
+			$("#main-container").css( "margin", "0 7%" );
 			$("#hide").hide();
 			$("#show").show();
 		  });
@@ -37,7 +37,7 @@
 
 		  $(window).resize(function(){
 			  if ($(window).width() <= 768) {
-				  $("#main-container").css( "margin", "0 5%" );
+				  $("#main-container").css( "margin", "0 7%" );
 			  }
 
 			  if ($(window).width() >= 769) {
@@ -45,7 +45,11 @@
 			  }
 		  })
 
-		});
+		}
+
+
+
+		); // End doc ready
 	</script>
 
 </head>
@@ -54,10 +58,22 @@
 
 <div id="main-wrapper">
 
+	<div id="site-toc-wrap">
+
+		<i class="fa fa-bars heading-collapse site-toc-button"></i>
+
+		<div id="site-toc" class= "target-collapse">
+
+			<embed src="index.php" height="100px" width="100%"></embed>
+
+		</div>
+
+	</div>
+
+
 <div id="toc-sidebar">
-	<p>TOC</p>
     <button id="hide">Hide</button>
-    <button id="show">Show</button>
+    <button id="show">Show TOC</button>
     <div class="toc">
     </div>
 </div>
@@ -153,6 +169,17 @@
 	 'onHighlight': function(el) {.$this.scrollIntoView();}, */
 	  
   });
+
+  $("i.fa.fa-bars.heading-collapse").click(function() {
+
+  		$("div#toc-sidebar button, .toc").toggleClass( 'toc-down');
+
+  		//$("div#toc-sidebar button").css("top", "49%");
+  		//$(".toc").css("top", "60%");
+
+		} // End function
+
+		); // End of click
 </script>
 
 <script src="../functions.js"></script>

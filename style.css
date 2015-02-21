@@ -120,6 +120,17 @@ table caption {
 	cursor: pointer;
 }
 
+#site-toc {
+	height:40%;
+	background-color: #EEE;
+}
+
+#site-toc-wrap .fa-bars {
+	position: absolute;
+	right: 3%;
+	top: 2%;
+}
+
 
 
 /*==========================
@@ -177,7 +188,11 @@ button:active {
 
 #hide, #show {
 	position:fixed;
-	top:50px;
+	top:10px;
+}
+
+#hide.toc-down, #show.toc-down {
+	top:42%;
 }
 
 #show {
@@ -191,11 +206,15 @@ button:active {
 	-moz-box-shadow: inset rgba(0, 0, 0, 0.07) 0 0 40px;
 	box-shadow: inset rgba(0, 0, 0, 0.07) 0 0 40px;
 	position: fixed;
-	top: 105px;
+	top: 65px;
 	bottom: 0;
 	overflow: auto;
 	width: 20%;
 	max-width: 250px;
+}
+
+.toc.toc-down {
+	top:60%;
 }
 
 .toc ul {

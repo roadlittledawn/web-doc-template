@@ -4,7 +4,7 @@ jQuery(document).ready(function() {
   //toggle the componenet with class msg_body
   jQuery(".heading-collapse").click(function()
   {
-    jQuery(this).next(".target-collapse").slideToggle(600);
+    jQuery(this).next(".target-collapse").slideToggle('fast');
   });
 });
 
