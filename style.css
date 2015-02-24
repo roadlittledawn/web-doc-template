@@ -123,6 +123,7 @@ table caption {
 #site-toc {
 	height:40%;
 	background-color: #EEE;
+	border-bottom: 3px #ccc solid;
 }
 
 #site-toc-wrap .fa-bars {
@@ -297,7 +298,7 @@ dt {
         font-size: 14px;
         float: right;
 	  }
-        a { text-decoration: none; font-size: 16px;color:#008c99; }
+        a { text-decoration: none; color:#008c99; }
         img { border: 0; margin: 0; margin-right: -20px; padding: 0; }
   
     dt.list-header {
