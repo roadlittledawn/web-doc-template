@@ -16,42 +16,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	
 
-
-	<script>
-		/* For responsive design
-		*/
-		$(document).ready(function(){
-		  $("#hide").click(function(){
-			$("div.toc").hide();
-			$("#main-container").css( "margin", "0 7%" );
-			$("#hide").hide();
-			$("#show").show();
-		  });
-
-		  $("#show").click(function(){
-			$("div.toc").show();
-			$("#main-container").css( "margin", "0 0 0 25%" );
-			$("#hide").show();
-			$("#show").hide();	
-		  });
-
-		  $(window).resize(function(){
-			  if ($(window).width() <= 768) {
-				  $("#main-container").css( "margin", "0 7%" );
-			  }
-
-			  if ($(window).width() >= 769) {
-				  $("#main-container").css( "margin", "0 0 0 25%" );
-			  }
-		  })
-
-		}
-
-
-
-		); // End doc ready
-	</script>
-
 </head>
 
 <body>
@@ -123,12 +87,12 @@
 	</div>
 	
 	
-</div>
-		
-		
+</div>		
 		
 	
 <!-- DOCS SITE CONTENT -->
+
+<div id="watermark">BETA</div>
     
 <p>Intro para</p> 
 

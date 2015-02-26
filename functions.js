@@ -1,11 +1,47 @@
 
 jQuery(document).ready(function() {
+
   jQuery(".target-collapse").hide();
   //toggle the componenet with class msg_body
   jQuery(".heading-collapse").click(function()
   {
     jQuery(this).next(".target-collapse").slideToggle(5);
   });
+
+    $("#hide").click(function(){
+
+      $("div.toc").hide();
+      $("#main-container").css( "margin", "0 7%" );
+      $("#hide").hide();
+      $("#show").show();
+
+    });
+
+    $("#show").click(function(){
+
+      $("div.toc").show();
+      $("#main-container").css( "margin", "0 0 0 25%" );
+      $("#hide").show();
+      $("#show").hide(); 
+
+    });
+
+    $(window).resize(function(){
+
+        if ($(window).width() <= 768) {
+
+          $("#main-container").css( "margin", "0 7%" );
+
+        }
+
+        if ($(window).width() >= 769) {
+
+          $("#main-container").css( "margin", "0 0 0 25%" );
+
+        }
+
+    })
+
 });
 
 
