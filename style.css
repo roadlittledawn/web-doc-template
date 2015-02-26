@@ -135,7 +135,19 @@ table caption {
 #site-toc-wrap .fa-bars {
 	position: absolute;
 	right: 3%;
-	top: 2%;
+	top: 5px;
+	z-index: 10;
+}
+
+#site-toc-wrap .fa-bars:active {
+	position: absolute;
+	right: 2.8%;
+	top: 7px;
+}
+
+embed.site-toc {
+	height: 100%;
+	width: 100%;
 }
 
 
