@@ -84,14 +84,19 @@ h3 {
 	opacity: .25;
 }
 
-  #watermark {
+ #watermark {
     font-size: 5em;
     color: red;
     font-weight: bold;
-    position: fixed; top: 0; right: .5em;
+    position: fixed; top: 40%; right: .5em;
     opacity: 0.10; filter:alpha(opacity=10);
     z-index: 1;
     overflow: visible;
+    /* Safari */
+-webkit-transform: rotate(90deg);
+
+/* Firefox */
+-moz-transform: rotate(90deg);
     }
 
 table, td {
