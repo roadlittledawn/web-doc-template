@@ -14,7 +14,7 @@ echo '
 	
 	<body>
 		
-		<h1>Content Index</h1>
+		<h1>Docs Index</h1>
 		
 		
 		<div id="dir">';
@@ -26,7 +26,7 @@ echo '
 			echo '
 			<li class="index-toc">
 
-				<a href="'. $filename.'">'.$filename.'</a>
+				<a href="'. $filename.'" target="blank">'.$filename.'</a>
 
 			</li>';
 					
