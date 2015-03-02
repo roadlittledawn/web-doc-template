@@ -134,14 +134,14 @@ table caption {
 
 #site-toc-wrap .fa-bars {
 	position: absolute;
-	right: 3%;
+	right: .2%;
 	top: 5px;
 	z-index: 10;
 }
 
 #site-toc-wrap .fa-bars:active {
 	position: absolute;
-	right: 2.8%;
+	right: .05%;
 	top: 7px;
 }
 
