@@ -16,15 +16,9 @@ Template provides:
 * Two different automatically generated ToCs:
   * Fixed, hide-able TOC sidebar
   * Hide-able ToC at top of smaller screen sizes
-
 * Pulldown menu of all docs in folder (upper right icon)
-
 * Link to relevant Jira for doc
-
 * Meta section for all meta fields in Drupal
-
 * Clamshells as they appear in docs site
-
 * Responsive style sheet
-
 * JS live refresh to see changes immediately
