@@ -36,8 +36,7 @@ h1, h2, h3, h4, p, li {
 
 #main-wrapper {
 	background-color: #fff;
-	margin: 0 auto;
-	max-width: 1260px;
+	width: 100%;
 	position: relative;
 }
 
