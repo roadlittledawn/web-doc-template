@@ -102,8 +102,9 @@ function setSidebarToggleLabel (action) {
 setSidebarToggleLabel('listen');
 
 // Adjust column layout and sidebar height if on screen bigger than tablet when using sidebar toggle
-if ($(window).width() > 991) {
-  $('.sidebar-toggle').click(function() {
+
+$('.sidebar-toggle').click(function() {
+  if ($(window).width() > 991) {
     if ( ! $(this).hasClass('collapsed') ) {
       $('#main .col').first().removeClass('col-md-4').addClass('col-md-1 sidebar-sm-width');
       $('#main .col').last().removeClass('col-md-8').addClass('col-md-11 main-col-move-left');
@@ -112,8 +113,9 @@ if ($(window).width() > 991) {
       $('#main .col').first().removeClass('col-md-1 sidebar-sm-width').addClass('col-md-4');
       $('#main .col').last().removeClass('col-md-11 main-col-move-left').addClass('col-md-8');
     }  
-  })
-}
+  }
+})
+
 
 // Set sidebar height dynamically when lower csat comes into view
 $(window).scroll(function() {
@@ -129,14 +131,14 @@ $(window).scroll(function() {
 
 // Hide sidebar nav on page load on smaller screens, change class for button text
 if ($(window).width() < 991) {
+  $('#sidebar-nav').height('inherit');
   $('#sidebar-first').removeClass('collapse in');
   $('.sidebar-heading .label').removeClass('open').addClass('closed');
 }
 
 $('nav.sidebar').affix({
   offset: {
-    top: 150,
-    //bottom: 493
+    top: 150
   }
 });
 $('#upper-csat').affix({
@@ -154,7 +156,7 @@ $('nav.sidebar, #upper-csat').on('affix.bs.affix', function(event){
 $( window ).resize(function() {
   if ($(window).width() < 991) {
     $('#sidebar-first').collapse('hide');
-    $('#sidebar-nav').height('100%');
+    $('#sidebar-nav').height('inherit');
   }
   if ($(window).width() > 991) {
     $('#main .col').first().removeClass('col-md-1 sidebar-sm-width').addClass('col-md-4');
