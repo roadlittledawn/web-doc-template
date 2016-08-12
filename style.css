@@ -6,116 +6,6 @@
 /*
  * utility rules -----------------------
  */
- html {
-   font-size:1em;
- }
-.fcenter {
-  text-align: center;
-  margin: auto; }
-
-.fleft {
-  float: left;
-  margin-right: 2em; }
-
-.fright {
-  float: right;
-  margin-left: 2em; }
-
-.padleft {
-  margin-left: 2em; }
-
-.padright {
-  margin-right: 2em; }
-
-.color_teal {
-  color: #008c99; }
-
-.color_orange {
-  color: #fa492b; }
-
-.bg_hilite {
-  background-color: #ffff6d; }
-
-.color_apm {
-  color: #358899; }
-
-/*
- * teal
- */
-.color_apm {
-  color: #358899; }
-
-/*
- * teal
- */
-.color_browser {
-  color: #f28f20; }
-
-/*
- * orange
- */
-.color_insights {
-  color: #f2bc56; }
-
-/*
- * gold
- */
-.color_snythetics {
-  color: #7a5aa6; }
-
-/*
- * purple
- */
-.color_mobile {
-  color: #00b6d8; }
-
-/*
- * aqua
- */
-.color_alerts {
-  color: #b286bc; }
-
-/*
- * lavender
- */
-.color_plugins {
-  color: #8cc641; }
-
-/*
- * green
- */
-.color_server {
-  color: #226582; }
-
-/*
- * navy
- */
-/*
- * header overrides -----------------------
- */
-header.set-insights {
-  border-top: 5px solid #f2bc56 !important; }
-
-header.set-browser {
-  border-top: 5px solid #f28f20 !important; }
-
-header.set-apm {
-  border-top: 5px solid #358899 !important; }
-
-header.set-alerts {
-  border-top: 5px solid #b286bc !important; }
-
-header.set-mobile {
-  border-top: 5px solid #00b6d8 !important; }
-
-header.set-platform {
-  border-top: 5px solid #8cc641 !important; }
-
-header.set-server {
-  border-top: 5px solid #226582 !important; }
-
-header.set-synthetics {
-  border-top: 5px solid #7a5aa6 !important; }
 
 /*
  * 
@@ -156,68 +46,6 @@ header.set-synthetics {
   opacity: 1;
   text-decoration: none !important; }
 
-.product-wrap a.apm {
-  background-color: #358899; }
-
-.product-wrap a.synthetics {
-  background-color: #7a5aa6; }
-
-.product-wrap a.browser {
-  background-color: #f28f20; }
-
-.product-wrap a.alerts {
-  background-color: #b286bc; }
-
-.product-wrap a.mobile {
-  background-color: #00b6d8; }
-
-.product-wrap a.servers {
-  background-color: #226582; }
-
-.product-wrap a.plugins {
-  background-color: #8cc641; }
-
-.product-wrap a.insights {
-  background-color: #f2bc56; }
-
-.agents {
-  text-align: center; }
-
-.lang-agent-wrap a {
-  display: inline-block;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  width: 105px;
-  height: 100px;
-  opacity: 0.75;
-  margin-right: 17px;
-  padding: 6em 0 0 0;
-  background: white url("https://docs.newrelic.com/sites/default/files/thumbnails/image/icons-langs.png") no-repeat 0 50%; }
-
-.lang-agent-wrap a:hover,
-.lang-agent-wrap a:focus,
-.lang-agent-wrap a:active {
-  opacity: 1; }
-
-.lang-agent-wrap a.php {
-  background-position: -100px 50%; }
-
-.lang-agent-wrap a.java {
-  background-position: -200px 50%; }
-
-.lang-agent-wrap a.dotnet {
-  background-position: -300px 50%; }
-
-.lang-agent-wrap a.python {
-  background-position: -400px 50%; }
-
-.lang-agent-wrap a.nodejs {
-  background-position: -500px 50%; }
-
-.lang-agent-wrap a.go {
-  background-position: -600px 50%; }
-
 .featured {
   margin-top: 6em; }
 
@@ -251,11 +79,6 @@ h2.card {
  * * These next two are haxied one offs for /insights/insights-interface icons
  * * Though they can be used anywhere we want to call out an icon in a table cell.
  */
-.content .insights-icon {
-  color: #dedede;
-  background-color: #5c5c5c;
-  padding: 10px 12px 10px 12px;
-  font-size: 2.25em; }
 
 .content .icon-box {
   border: 1px solid #dddddd;
@@ -484,19 +307,9 @@ li li.page-contents {
  * ---------------------------------------------------------
  * * Third party imports
  */
-/*
- * @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700&subset=latin,latin-ext);
- */
-/*
- * ---------------------------------------------------------
- * * Style Rules
- */
-*,
-*:after,
-*:before {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box; }
+
+ @import url(http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700&subset=latin,latin-ext);
+
 
 /*
  * Body --------------------------------
@@ -515,6 +328,10 @@ body {
 /*
  * User page tweaks ---------------------
  */
+html {
+	font-size:16px;
+}
+
   body.page-user #main-wrapper #main div.tabs ul.primary {
     margin: 0px !important;
     padding: 0px;
@@ -1667,10 +1484,11 @@ body {
   content: ' Show Contents'; }
 
 .sidebar-toggle {
-  cursor: pointer;
-  padding: 1em;
-  border-radius: 0;
-  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 2px 0px, rgba(0, 0, 0, 0.3) 0px 6px 10px 0px; }
+	min-height:53px;
+	cursor: pointer;
+	padding: 1em;
+	border-radius: 0;
+}
 
 .navbar-toggle {
   cursor: pointer;
@@ -2471,7 +2289,11 @@ div#content div.content article.node-unpublished {
 
   nav.sidebar.affix {
     top: 0;
-    width: 335px; }
+    width: 335px; 	
+  }
+  nav.sidebar.affix > .sidebar-toggle {
+  	  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 2px 0px, rgba(0, 0, 0, 0.3) 0px 6px 10px 0px; }
+  }
 
   nav.sidebar.affix.logged-in {
     top: 39px; }
