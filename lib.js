@@ -40,43 +40,127 @@ if (!('contains' in String.prototype)) {
   };
 }
 
+// Detect which browser for the page scroll object because Mozilla uses html and webkit uses body for scrolling page
+var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+var isSafari = /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor);
+var isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+if (isChrome==true || isSafari==true) { var scrollObject = 'body'; }
+else if (isFirefox==true) { var scrollObject = 'html'; }
+else { var scrollObject = 'html, body'; }
+
+var isMobile = {
+    Android: function() {
+        return navigator.userAgent.match(/Android/i);
+    },
+    BlackBerry: function() {
+        return navigator.userAgent.match(/BlackBerry/i);
+    },
+    iOS: function() {
+        return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+    },
+    Opera: function() {
+        return navigator.userAgent.match(/Opera Mini/i);
+    },
+    Windows: function() {
+        return navigator.userAgent.match(/IEMobile/i);
+    },
+    any: function() {
+        return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+    }
+};
 
 /* --------------------------------------------------------- */
 jQuery(document).ready(function($) {
 
+// Check to see if user is logged in. Used in some functions to adjust elements for admin bar
 var loggedIn = ( $('body').hasClass('logged-in') ) ? true : false;
-
 
 /* ---------------------------------------------------------
  * Sidebar nav and responsive scripts
  * --------------------------------------------------------- */
 
+ /**
+ * Display top form after a short delay to allow cleanup time.
+  Called sooner than scroll animations because browsers were handling this differently and not 
+  scrolling correctly
+ */
+$('div#upper-csat').fadeIn(500);
+
+// Get height of top elements to offset content below them
+var adminBarHeight = $('#navbar-bar').height();
+var csatBarHeight = $('#upper-csat').height();
+var mainHeaderHeight = $('#header').height();
+var isMenuPage = ($('link[rel=shortlink]').length) ? false : true;
+
+$('nav.sidebar, .sidebar-toggle').affix({
+  offset: {
+    top: 150,
+  }
+});
+
+$('#upper-csat').affix({
+  offset: {
+    top: 150
+  }
+});
+
 // Set height of sidebar dynamically
 
 // Detect if element is in view and how far away from top it is. Used to dynamically calculate sidebar height
-function isElementInViewport (el) {
+var $w = $(window);
+$.fn.visible = function(partial,hidden,direction){
 
-    //special bonus for those using jQuery
-    if (typeof jQuery === "function" && el instanceof jQuery) {
-        el = el[0];
+    if (this.length < 1)
+        return;
+
+    var $t        = this.length > 1 ? this.eq(0) : this,
+        t         = $t.get(0),
+        vpWidth   = $w.width(),
+        vpHeight  = $w.height(),
+        direction = (direction) ? direction : 'both',
+        clientSize = hidden === true ? t.offsetWidth * t.offsetHeight : true;
+
+    if (typeof t.getBoundingClientRect === 'function'){
+
+        // Use this native browser method, if available.
+        var rec = t.getBoundingClientRect(),
+            tViz = rec.top    >= 0 && rec.top    <  vpHeight,
+            bViz = rec.bottom >  0 && rec.bottom <= vpHeight,
+            lViz = rec.left   >= 0 && rec.left   <  vpWidth,
+            rViz = rec.right  >  0 && rec.right  <= vpWidth,
+            vVisible   = partial ? tViz || bViz : tViz && bViz,
+            hVisible   = partial ? lViz || rViz : lViz && rViz;
+
+        if(direction === 'both')
+            return clientSize && vVisible && hVisible;
+        else if(direction === 'vertical')
+            return clientSize && vVisible;
+        else if(direction === 'horizontal')
+            return clientSize && hVisible;
+    } else {
+
+        var viewTop         = $w.scrollTop(),
+            viewBottom      = viewTop + vpHeight,
+            viewLeft        = $w.scrollLeft(),
+            viewRight       = viewLeft + vpWidth,
+            offset          = $t.offset(),
+            _top            = offset.top,
+            _bottom         = _top + $t.height(),
+            _left           = offset.left,
+            _right          = _left + $t.width(),
+            compareTop      = partial === true ? _bottom : _top,
+            compareBottom   = partial === true ? _top : _bottom,
+            compareLeft     = partial === true ? _right : _left,
+            compareRight    = partial === true ? _left : _right;
+
+        if(direction === 'both')
+            return !!clientSize && ((compareBottom <= viewBottom) && (compareTop >= viewTop)) && ((compareRight <= viewRight) && (compareLeft >= viewLeft));
+        else if(direction === 'vertical')
+            return !!clientSize && ((compareBottom <= viewBottom) && (compareTop >= viewTop));
+        else if(direction === 'horizontal')
+            return !!clientSize && ((compareRight <= viewRight) && (compareLeft >= viewLeft));
     }
-
-    var rect = el.getBoundingClientRect();
-
-    if (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) && /*or $(window).height() */
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth) /*or $(window).width() */ 
-      ) {
-
-      return rect.top;
-
-    }
-    else {
-    return false;  
-    };
-}
+};
 
 // Change sidebar nav toggle button text
 
@@ -102,9 +186,8 @@ function setSidebarToggleLabel (action) {
 setSidebarToggleLabel('listen');
 
 // Adjust column layout and sidebar height if on screen bigger than tablet when using sidebar toggle
-
-$('.sidebar-toggle').click(function() {
-  if ($(window).width() > 991) {
+if ($(window).width() > 991) {
+  $('.sidebar-toggle').click(function() {
     if ( ! $(this).hasClass('collapsed') ) {
       $('#main .col').first().removeClass('col-md-4').addClass('col-md-1 sidebar-sm-width');
       $('#main .col').last().removeClass('col-md-8').addClass('col-md-11 main-col-move-left');
@@ -113,39 +196,48 @@ $('.sidebar-toggle').click(function() {
       $('#main .col').first().removeClass('col-md-1 sidebar-sm-width').addClass('col-md-4');
       $('#main .col').last().removeClass('col-md-11 main-col-move-left').addClass('col-md-8');
     }  
-  }
-})
+  })
+}
+// On page load on larger screens dynamically set the height of the sidebar so it's scrollable and is fills left side of screen
+if ($(window).width() > 991) {
+    var sidebarHeight = $(window).height() - adminBarHeight - mainHeaderHeight - csatBarHeight - $('.sidebar-toggle').height();
 
+    // Wait for affix to add affix classes
+    $('#sidebar-nav.affix-top').height(sidebarHeight);
+}
 
 // Set sidebar height dynamically when lower csat comes into view
+var bottomElem = '#lower-csat';
+
 $(window).scroll(function() {
-  if ($(window).width() > 991) {
-    if (isElementInViewport( $('#lower-csat') )) {
-      var sidebarHeight = isElementInViewport( $('#lower-csat') );
-      if (loggedIn == true) { sidebarHeight -= 39; } // subtract height of admin bar
-      $('#sidebar-nav').height(sidebarHeight);
+  if ($('#sidebar-nav').length) {
+    if ($(window).width() > 991) {
+        if ( isMenuPage ) {
+          
+        }
+        else if ( $(bottomElem).visible( true ) ) {
+          var scrollTop     = $(window).scrollTop(),
+          elementOffset = $(bottomElem).offset().top,
+          distance      = (elementOffset - scrollTop);
+          var sidebarHeight = distance;
+          if (loggedIn == true) { sidebarHeight -= adminBarHeight; } // subtract height of admin bar
+          $('#sidebar-nav').height(sidebarHeight);
+        }
+        else {
+          var sidebarHeight = $(window).height() - adminBarHeight;
+          $('#sidebar-nav').height(sidebarHeight);
+        }
+      
     }
-    else {$('#sidebar-nav').height(1300);}
   }
 });
 
 // Hide sidebar nav on page load on smaller screens, change class for button text
 if ($(window).width() < 991) {
-  $('#sidebar-nav').height('inherit');
   $('#sidebar-first').removeClass('collapse in');
   $('.sidebar-heading .label').removeClass('open').addClass('closed');
 }
 
-$('nav.sidebar').affix({
-  offset: {
-    top: 150
-  }
-});
-$('#upper-csat').affix({
-  offset: {
-    top: 150
-  }
-});
 // If authenticated person with admin bar at top, offset
 $('nav.sidebar, #upper-csat').on('affix.bs.affix', function(event){
   ($('body').hasClass('logged-in')) ? $('nav.sidebar, #upper-csat').addClass('logged-in') : false;
@@ -154,15 +246,25 @@ $('nav.sidebar, #upper-csat').on('affix.bs.affix', function(event){
 // On window resize, collapse sidebar and remove any dynamically set height
 
 $( window ).resize(function() {
-  if ($(window).width() < 991) {
+  /* Check for mobile device because some mobile browsers hide url bar as 
+  user scrolls which triggers resize() and continually hides menu
+  */
+  if ($(window).width() < 991 && ! isMobile.any() ) {
     $('#sidebar-first').collapse('hide');
-    $('#sidebar-nav').height('inherit');
+    $('#sidebar-nav').height('100%');
   }
+  // If mobile device, make sidebar 100% instead of pixels so hides correctly
+  if ($(window).width() < 991 && isMobile.any() ) {
+    $('#sidebar-nav').height('100%');
+  } 
   if ($(window).width() > 991) {
-    $('#main .col').first().removeClass('col-md-1 sidebar-sm-width').addClass('col-md-4');
-    $('#main .col').last().removeClass('col-md-11 main-col-move-left').addClass('col-md-8');
     $('#sidebar-first').collapse('show');
-    $('#sidebar-nav').height(1300);
+    if ($('#sidebar-first').length) {
+      $('#main .col').first().removeClass('col-md-1 sidebar-sm-width').addClass('col-md-4');
+      $('#main .col').last().removeClass('col-md-11 main-col-move-left').addClass('col-md-8');
+      var sidebarHeight = $(window).height() - adminBarHeight;
+      $('#sidebar-nav').height(sidebarHeight);
+    }
   }
 });
 
@@ -191,7 +293,7 @@ if ($('table')) {
  */
   var menuList = '';
   // don't include these in menu
-  var h2System = ['Status message', 'Quick links', 'Contents', 'Search form', 'Internal notes'];
+  var h2System = ['Status message', 'Warning message', 'Quick links', 'Contents', 'Search form', 'Internal notes'];
   var h2Listing = $('#content').find('h2');
   var h2Length = h2Listing.length;
   for (var i=0; i<h2Length; i++) {
@@ -199,7 +301,7 @@ if ($('table')) {
     var h2ThisText  = h2This.text();
     var subMenuList = '';
     if ((jQuery.inArray(h2ThisText, h2System) == -1) && h2ThisText) {
-      if (!(h2This.is('[id]'))) { h2This.attr('id', 'h2-'+h2ThisText.replace(/ /g,'-')); }
+      if (!(h2This.is('[id]'))) { h2This.attr('id', 'h2-'+h2ThisText.replace(/[\/ ]/g,'-')); }
       menuList += '<li id="jumpto-'+h2This.attr('id')+'" class="page-contents"><a href="#'+h2This.attr('id')+'">'+h2ThisText+'</a>';
       // add quick links for h3 + dt elements
       var flListing = h2This.nextUntil('h2','h3, dl');
@@ -210,7 +312,7 @@ if ($('table')) {
           if (!(flThis.is('[id]'))) {
             flThis.attr('id', 'h3-'+flThis.text().replace(/ /g,'-'));
           }
-          subMenuList += '<li><a href="#'+flThis.attr('id')+'">'+flThis.text()+'</a></li>';
+          subMenuList += '<li class="page-contents-sub"><a href="#'+flThis.attr('id')+'">'+flThis.text()+'</a></li>';
         }
         var fl2Listing = flThis.children('.freq-link');
         var fl2Length = fl2Listing.length;
@@ -219,7 +321,7 @@ if ($('table')) {
           if (!(fl2This.is('[id]'))) {
             fl2This.attr('id', 'dl-'+fl2This.text().replace(/ /g,'-'));
           }
-          subMenuList += '<li><a href="#'+fl2This.attr('id')+'">'+fl2This.text()+'</a></li>';
+          subMenuList += '<li class="page-contents-sub"><a href="#'+fl2This.attr('id')+'">'+fl2This.text()+'</a></li>';
         }
       }
       if (subMenuList) { subMenuList = '<ul>'+subMenuList+'</ul>'; }
@@ -227,47 +329,38 @@ if ($('table')) {
       menuList += '</li>';
     }
   }
-  //$('#qiklinks').after('<ul id="jumpto" />');
-  //$('#jumpto').append(menuList); Append to current_loc instead
-
-
 
 /**
- * Flag the current page in the menu. Remove url check to make it work in jsfiddle
+ * Page location flagging.
+ *
  */
- 
- // Temporary line to add it for jfiddle because no url available
- $('aside#sidebar-first-docs').find('li.current_loc').append(menuList);
- 
+
+/**
+ * Flag the current page in the menu.
+ */
+
   var current_path  = window.location.pathname;
   // page menus
-  var sidebarEl     = $('aside#sidebar-first-docs').find('a');
+  var sidebarEl     = $('#sidebar-first-docs').find('li a');
   var sidebarLength = sidebarEl.length;
   for (var i=0; i<sidebarLength; i++) {
     var sidebarThis = sidebarEl.eq(i);
     if (sidebarThis.attr('href') == current_path) {
       sidebarThis.addClass('current_loc');
-      sidebarThis.closest('li').addClass('current_loc nav').append(menuList);
+      sidebarThis.closest('li').addClass('current_loc nav').after(menuList);
     }
   }
+  // Invoke bootstrap scrollspy to highlight h2s user is viewing in sidebar
+  var scrollOffset = csatBarHeight+adminBarHeight+38;
+  $('body').scrollspy({ 
+    target: '#sidebar-nav',
+    offset: scrollOffset
+  })
 
-  // taxonomy menus
-      sidebarEl     = $('div.region-sidebar-first').find('div.view-categories-menu a');
-      sidebarLength = sidebarEl.length;
-  for (var i=0; i<sidebarLength; i++) {
-    var sidebarThis = sidebarEl.eq(i);
-    if (sidebarThis.attr('href') == current_path) {
-      sidebarThis.addClass('current_loc');
-      sidebarThis.closest('li').addClass('current_loc');
-    } else if (current_path.contains(sidebarThis.attr('href'))) {
-      sidebarThis.addClass('current_loc');
-      sidebarThis.closest('li').addClass('current_loc');
-    }
-  }
   // Scroll sidebar nav to doc being viewed
-  if ($('li.current_loc')) {
+  if ($('li.current_loc').length) {
     $('li.current_loc').parent('ul').addClass('in');
-    $('nav.sidebar').scrollTop( $('li.current_loc').offset().top-100);
+    $('nav.sidebar').scrollTop( $('li.current_loc').offset().top);
     $('li.current_loc').parent().prev('h3').children('.fa').removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
   }
   $('.collapse-toggle').click(function(e) {
@@ -275,6 +368,30 @@ if ($('table')) {
     $(this).next('.collapse').collapse('toggle');
     ($(this).children('.fa').hasClass('fa-minus-square-o')) ? $(this).children('.fa').removeClass('fa-minus-square-o').addClass('fa-plus-square-o') : $(this).children('.fa').removeClass('fa-plus-square-o').addClass('fa-minus-square-o');
     $('#sidebar-first').on('hide.bs.collapse, show.bs.collapse', setSidebarToggleLabel('listen') );
+  });
+
+  // LOAD:  Scroll page up to bring target hash into view below CSAT / admin bars
+
+  if (loggedIn==true) { var hashOffsetTop = csatBarHeight + adminBarHeight + 33; } // number at end is arbitrary extra
+  else if (loggedIn ==false) {var hashOffsetTop = csatBarHeight + 33;}
+
+  // When anchor link is clicked on page, scroll page up
+    $('a').click(function(e) {
+      if (this.hash !== '' && this.getAttribute("href").charAt(0) == "#") {
+        e.preventDefault();
+        var topTarget = this.hash
+        if ($(topTarget).length) {
+          var scrollTopValue = $(topTarget).offset().top - hashOffsetTop;
+          $(scrollObject).animate({
+            scrollTop: scrollTopValue },
+            400, 
+            function(){
+              // Add hash (#) to URL when done scrolling (default click behavior)
+              window.location.hash = topTarget;
+            }
+          );
+        }
+      }
   });
 
 /**
@@ -455,13 +572,17 @@ if ($('pre')) {
 
   // LOAD: Add list headers and hide/show all links
   $(clamshellList).each(function () {
-    $(this).prepend('<dt class="list-header"><span class="right-link"><a class="all-link" href="#all-links" title="show all"><b>Show All</b> &nbsp; <i class="fa fa-list"></i></a></span> </dt>');
+    $(this).prepend('<dt class="list-header"><span class="right-link"><a class="all-link" href="#all-links" title="Show all in this section OR type <b>F</b> to show all, <br/><b>H</b> to hide all"><b>Show All</b> &nbsp; <i class="fa fa-list"></i></a></span> </dt>');
     if ($(this).hasClass('example-box')) {
       if ( $(this).children('dt').length > 2 ) {
         $(this).children('dt.list-header').addClass('multi');
       }
     }
   });
+  // Initialize bootstrap tooltip for Show All button
+  $('.all-link').tooltip(
+    {html: true}
+  );
 
   // LOAD: open list item on direct link to it in URL
     if (($(clamshellList)) && (location.hash!='')) {
@@ -477,7 +598,6 @@ if ($('pre')) {
             $(clamshellTarget).parents('dd').prev().find('.more-link').find('i span').text('[hide details]');
             $(clamshellTarget).parents('dd').toggle(500);
           }
-          $('html, body').scrollTop($(clamshellTarget).offset().top-50);
         }
     }
     else { // LOAD: hide all dd's cuz no anchor in URL
@@ -494,6 +614,7 @@ if ($('pre')) {
       $(clamshellTarget).find('a.more-link i span').text('[hide details]');
       $(clamshellTarget).find('a.more-link i').toggleClass('fa-toggle-right fa-toggle-down');
       $(clamshellTarget).next('dd').show(500);
+      $(scrollObject).scrollTop($(clamshellTarget).offset().top-hashOffsetTop);
     }
   });
 
@@ -561,14 +682,7 @@ if ($('pre')) {
     }
     if (e.keyCode == 27) { $('#lightbox').fadeOut(); }
   });
-
-// LOAD:  Scroll tweak. Should run last
-  $(window).on('hashchange', function(e){
-    if (location.hash!='') {
-      var topTarget = location.hash;
-      if ($(topTarget).length) { $('html, body').scrollTop($(topTarget).offset().top-50); }
-    }
-  });
+  
 
 /* ---------------------------------------------------------
  * Fixes and workarounds.
@@ -688,10 +802,24 @@ if ($('pre')) {
     return false;
   });
 
-/**
- * Display top form after a short delay to allow cleanup time.
- */
-  setTimeout(function () { $('div#upper-csat').show(500); }, 250);
+  // On page load, move target hash lower by scrolling page up
+
+  // to top right away
+  if ( window.location.hash ) scroll(0,0);
+  // void some browsers issue
+  setTimeout( function() { scroll(0,0); }, 1);
+
+  if (location.hash!=='') {
+    var topTarget = location.hash;
+    if ($(topTarget).length) {
+      var scrollTopValue = $(topTarget).offset().top - hashOffsetTop;
+      setTimeout(function(){ // Must set timeout to apply after browser scrolls to hash itself
+        $(scrollObject).animate({
+            scrollTop: scrollTopValue 
+          }, 400);
+      }, 550);
+    }
+  }
 
 /**
  * Hide duplicate feedback messages.
@@ -741,4 +869,3 @@ if ($('pre')) {
   //Click anywhere to clear
   $('body').on('click', '#lightbox', function() { $('#lightbox').fadeToggle(); });
 });
-
